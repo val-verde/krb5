@@ -85,6 +85,15 @@ static int initparse(struct krb5int_dns_state *);
 #define PRIMARY_DOMAIN(h) dns_search_list_domain(h, 0)
 #define DESTROY_HANDLE(h) dns_free(h)
 
+#elif defined(__ANDROID__)
+
+/* Use the macOS interfaces dns_open, dns_search, and dns_free. */
+#define DECLARE_HANDLE(h) (res_init() == 0)
+#define INIT_HANDLE(h) 1
+#define SEARCH(h, n, c, t, a, l) res_search(n, c, t, a, l)
+#define PRIMARY_DOMAIN(h) 0
+#define DESTROY_HANDLE(h)
+
 #elif HAVE_RES_NINIT && HAVE_RES_NSEARCH
 
 /* Use res_ninit, res_nsearch, and res_ndestroy or res_nclose. */
